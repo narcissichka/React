@@ -12,14 +12,19 @@ import { useStyles } from "./use-styles";
 import debounce from "lodash.debounce";
 // import KeyboardArrowDownSharpIcon from '@mui/icons-material/KeyboardArrowDownSharp';
 
-const Message = ({ message }) => {
+const Message = ({ message, refWrapper }) => {
   const styles = useStyles(message);
-  const ref = useRef(null);
+  const refMessage = useRef(null);
+
   useEffect(() => {
-    ref.current?.scrollIntoView();
-  }, [ref]);
+    let block = refWrapper.current;
+    let isBottom = block?.scrollTop + window.innerHeight >= block?.scrollHeight;
+    if (isBottom) {
+      refMessage.current?.scrollIntoView();
+    }
+  }, [refMessage, refWrapper]);
   return (
-    <div ref={ref} className={styles.messageCart}>
+    <div ref={refMessage} className={styles.messageCart}>
       <p className={styles.messageCartAuthor}>{message.author}</p>
       <p className={styles.messageCartText}>{message.text}</p>
       <p className={styles.messageCartTime}>{message.time}</p>
@@ -63,7 +68,6 @@ export const MessageList = () => {
     [messageList, value, roomId]
   );
 
-  useEffect(() => {}, []);
   useLayoutEffect(() => {
     let block = refWrapper.current;
     document.querySelector(".hidden").setAttribute("visibility", "hidden");
@@ -82,11 +86,11 @@ export const MessageList = () => {
     }
 
     return () => block?.removeEventListener("scroll", cb);
-  }, []);
+  }, [refWrapper]);
 
   useEffect(() => {
     ref.current?.focus();
-  }, []);
+  }, [ref]);
 
   useEffect(() => {
     const roomMessages = messageList[roomId] ?? [];
@@ -113,7 +117,7 @@ export const MessageList = () => {
         }}
       />
       {roomMessages.map((message, i) => (
-        <Message message={message} key={i.toString()} />
+        <Message message={message} refWrapper={refWrapper} key={i.toString()} />
       ))}
       <div className={styles.messageComponent}>
         <div className={styles.messageForm}>

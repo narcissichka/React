@@ -8,13 +8,24 @@ export const useStyles = makeStyles((ctx) => {
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       height: "95vh",
-      position: "relative",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "1%",
+      paddingTop: "2%",
     },
-    link: {
+    linkHome: {
       textDecoration: "none",
       position: "absolute",
       top: "5px",
       left: "5px",
+      color: `${ctx.palette.text.heading}`,
+    },
+    linkChat: {
+      textDecoration: "none",
+      position: "absolute",
+      top: "5px",
+      right: "5px",
       color: `${ctx.palette.text.heading}`,
     },
     heading: {
@@ -24,6 +35,12 @@ export const useStyles = makeStyles((ctx) => {
       textTransform: "uppercase",
       fontSize: "2rem",
       userSelect: "none",
+    },
+    radioDiv: {
+      display: "flex",
+      width: "15%",
+      justifyContent: "space-between",
+      //   flexDirection: "column",
     },
     chats: {
       marginInline: "auto",
@@ -35,11 +52,6 @@ export const useStyles = makeStyles((ctx) => {
       background: `${ctx.palette.glassmorphism.color}`,
       boxShadow: `${ctx.palette.glassmorphism.shadow}`,
       backdropFilter: `${ctx.palette.glassmorphism.blur}`,
-    },
-    messages: {
-      width: "80%",
-      height: "92%",
-      marginLeft: "auto",
     },
   };
 });

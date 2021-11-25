@@ -1,3 +1,3 @@
-export * from "./chat-page";
-export * from "./profile-page";
-export * from "./home-page";
+export * from "./chat";
+export * from "./profile";
+export * from "./home";

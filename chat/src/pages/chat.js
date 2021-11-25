@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { Application, MessageList, ChatList, ChatText } from "../components";
+import { Template, MessageList, ChatList, ChatText } from "../components";
 
 export const ChatPage = () => {
   const navigate = useNavigate();
@@ -21,13 +21,11 @@ export const ChatPage = () => {
     <Routes>
       <Route
         path="/"
-        element={<Application chats={<ChatList />} messages={<ChatText />} />}
+        element={<Template chats={<ChatList />} messages={<ChatText />} />}
       />
       <Route
         path="/:roomId"
-        element={
-          <Application chats={<ChatList />} messages={<MessageList />} />
-        }
+        element={<Template chats={<ChatList />} messages={<MessageList />} />}
       />
     </Routes>
   );

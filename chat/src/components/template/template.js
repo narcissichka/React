@@ -1,13 +1,16 @@
 import React from "react";
 import { useStyles } from "./use-styles";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import {HomeOutlined, SupervisorAccountOutlined} from "@mui/icons-material";
 import { Link } from "react-router-dom";
-export const Application = ({ chats, messages }) => {
+export const Template = ({ chats, messages }) => {
   const styles = useStyles();
   return (
     <div id="app">
-      <Link className={styles.link} to={"/"}>
-        <HomeOutlinedIcon fontSize="large" />
+      <Link className={styles.linkHome} to={"/"}>
+        <HomeOutlined fontSize="large" />
+      </Link>
+      <Link className={styles.linkProfile} to={"/profile"}>
+        <SupervisorAccountOutlined fontSize="large" />
       </Link>
       <h1 className={styles.heading}>Chat</h1>
       <div className={styles.wrapper}>
