@@ -100,5 +100,16 @@ export const useStyles = makeStyles((ctx) => {
         color: "white",
       },
     },
+    delete: {
+      color: "gray",
+      "&:hover": {
+        color: "white",
+      },
+      position: "absolute",
+      top: "5px",
+      left: (props) => (props.author !== "user" ? "" : "5px"),
+      right: (props) => (props.author !== "user" ? "5px" : ""),
+      cursor: "pointer",
+    },
   };
 });

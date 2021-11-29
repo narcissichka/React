@@ -15,12 +15,6 @@ export const useStyles = makeStyles((ctx) => {
     },
     listItem: {
       userSelect: "none",
-      "&:active svg": {
-        visibility: "visible",
-      },
-      "&:focus svg": {
-        visibility: "visible",
-      },
       "& .Mui-selected": {
         backgroundColor: `${ctx.palette.secondary.main}`,
       },
@@ -30,7 +24,6 @@ export const useStyles = makeStyles((ctx) => {
     },
     delete: {
       color: "gray",
-      visibility: "hidden",
     },
     add: {
       color: "gray",
