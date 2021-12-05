@@ -18,6 +18,11 @@ export const Home = () => {
               <p className={styles.itemText}>Profile</p>
             </ListItem>
           </Link>
+          <Link className={styles.link} to={"/gists"}>
+            <ListItem>
+              <p className={styles.itemText}>Gists</p>
+            </ListItem>
+          </Link>
         </List>
         <h1 className={styles.welcome}>welcome</h1>
       </div>
