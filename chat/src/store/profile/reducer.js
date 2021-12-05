@@ -1,28 +1,48 @@
-import { NAME, SURNAME, SEX, SUBSCRIPTION } from "./types";
+import {
+  SET_NAME,
+  SET_SURNAME,
+  SET_SEX,
+  SET_SUBSCRIPTION,
+  SET_SUBMIT,
+  DELETE_INFO,
+} from "./types";
 
-const initialSate = { userInfo: {} };
+const initialSate = {
+  userInfo: {},
+  submit: false,
+};
 
 export const profileReducer = (state = initialSate, action) => {
   switch (action.type) {
-    case NAME:
+    case SET_NAME:
       return {
         ...state,
-        userInfo: {...state.userInfo, 'name':action.payload},
+        userInfo: { ...state.userInfo, name: action.payload },
       };
-    case SURNAME:
+    case SET_SURNAME:
       return {
         ...state,
-        userInfo: {...state.userInfo, 'surname':action.payload},
+        userInfo: { ...state.userInfo, surname: action.payload },
       };
-    case SUBSCRIPTION:
+    case SET_SUBSCRIPTION:
       return {
         ...state,
-        userInfo: {...state.userInfo, 'subscription':action.payload},
+        userInfo: { ...state.userInfo, subscription: action.payload },
       };
-    case SEX:
-     return {
+    case SET_SEX:
+      return {
         ...state,
-        userInfo: {...state.userInfo, 'sex':action.payload},
+        userInfo: { ...state.userInfo, sex: action.payload },
+      };
+    case SET_SUBMIT:
+      return {
+        ...state,
+        submit: action.payload,
+      };
+    case DELETE_INFO:
+      return {
+        ...state,
+        userInfo: {},
       };
     default:
       return state;
