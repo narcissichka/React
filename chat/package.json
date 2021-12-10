@@ -11,6 +11,8 @@
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "date-fns": "^2.27.0",
+    "firebase": "^9.6.0",
+    "firebase-tools": "^9.23.1",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "nanoid": "^3.1.30",
