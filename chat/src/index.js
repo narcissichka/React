@@ -26,14 +26,13 @@ const App = () => {
     dispatch(setSessionFB());
   }, [dispatch]);
 
-  const isAuth = session?.user.email;
-
+  const isAuth = session?.user?.email ?? null;
   return (
     <PersistGate persistor={persistor}>
       <CustomThemeProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="//*" element={<HomePage session={session} />} />
+            <Route path="//*" element={<HomePage />} />
             <Route
               path="/chat/*"
               element={
@@ -45,7 +44,7 @@ const App = () => {
             <Route
               path="/profile/*"
               element={
-                <PrivateRoute isAuth={isAuth}>
+                <PrivateRoute isAuth={isAuth} to="/login">
                   <ProfilePage />
                 </PrivateRoute>
               }
@@ -53,7 +52,7 @@ const App = () => {
             <Route
               path="/gists"
               element={
-                <PrivateRoute isAuth={isAuth}>
+                <PrivateRoute isAuth={isAuth} to="/login">
                   <Gists />
                 </PrivateRoute>
               }
@@ -84,7 +83,7 @@ const App = () => {
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />{" "}
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

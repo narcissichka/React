@@ -28,9 +28,9 @@ const ProfileInfo = () => {
     dispatch(editProfileFB("subscription", false));
     dispatch(deleteInfo());
   };
-
-  let { name, surname, sex, subscription } = userInfo ?? "";
-  if (submit && userInfo.name && userInfo.surname && userInfo.sex) {
+  let { name, surname, sex, subscription } =
+    (userInfo.userInfo || userInfo) ?? "";
+  if (submit && name && surname && sex) {
     return (
       <div className={styles.wrapper}>
         <h2>{name + " " + surname}</h2>
@@ -47,7 +47,7 @@ const ProfileInfo = () => {
         <input
           required
           type="text"
-          onInput={(e) => {
+          onBlur={(e) => {
             handleValue(e, "name");
           }}
           placeholder="Name"
@@ -55,7 +55,7 @@ const ProfileInfo = () => {
         <input
           required
           type="text"
-          onInput={(e) => {
+          onBlur={(e) => {
             handleValue(e, "surname");
           }}
           placeholder="Surname"

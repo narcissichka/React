@@ -58,5 +58,24 @@ export const useStyles = makeStyles((ctx) => {
       userSelect: "none",
       marginTop: "2%",
     },
+    exit: {
+      cursor: "pointer",
+      color: `white`,
+      border: "none",
+      background: "linear-gradient(145deg, #dc9de7, #b984c2)",
+      boxShadow: "3px 3px 6px #af7db8, -3px -3px 6px #eda9f8",
+      textTransform: "uppercase",
+      width: "5rem",
+      height: "2rem",
+      marginTop: "20%",
+      transition: "all 0.2s linear",
+      letterSpacing: "0.25em",
+      borderRadius: "2rem",
+      "&:hover": {
+        color: "gray",
+        background: "#ce93d8",
+        boxShadow: "3px 3px 6px #af7db8, -3px -3px 6px #eda9f8",
+      },
+    },
   };
 });

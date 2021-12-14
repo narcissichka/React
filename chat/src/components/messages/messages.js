@@ -77,7 +77,10 @@ export const MessageList = () => {
   const addMessage = useCallback(() => {
     if (value) {
       dispatch(
-        sendMessageFB({ author: session?.user.email, text: value }, roomId)
+        sendMessageFB(
+          { author: session?.user?.email ?? "user", text: value },
+          roomId
+        )
       );
     }
   }, [dispatch, value, roomId, session]);
