@@ -32,7 +32,7 @@ export const useStyles = makeStyles((ctx) => {
       textDecoration: "none",
       userSelect: "none",
       display: "block",
-      padding: "12%",
+      padding: "10%",
       textAlign: "center",
       "& li": {
         color: `${ctx.palette.text.main}`,
