@@ -1,10 +1,4 @@
-import {
-  useRef,
-  useCallback,
-  useEffect,
-  useState,
-  useLayoutEffect,
-} from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Input, InputAdornment } from "@mui/material";
 import {
@@ -16,16 +10,19 @@ import { useStyles } from "./use-styles";
 import debounce from "lodash.debounce";
 import {
   messagesSelector,
-  sendMessage,
   deleteMessage,
+  sendMessageWithBot,
 } from "../../store/messages";
-import { conversationsSelector } from "../../store/conversations";
+import {
+  conversationsSelector,
+  messageValueSelector,
+  handleChangeMessageValue,
+} from "../../store/conversations";
 import { useDispatch, useSelector } from "react-redux";
 
-const Message = ({ message, refWrapper, dispatch }) => {
+const Message = ({ message, refWrapper, dispatch, roomId }) => {
   const styles = useStyles(message);
   const refMessage = useRef(null);
-  const { roomId } = useParams();
   useEffect(() => {
     let block = refWrapper.current;
     let isBottom = block?.scrollTop + window.innerHeight >= block?.scrollHeight;
@@ -58,14 +55,14 @@ export const MessageList = () => {
 
   const messages = useSelector(messagesSelector(roomId));
   const conversations = useSelector(conversationsSelector);
+  const value = useSelector(messageValueSelector(roomId));
   const dispatch = useDispatch();
-  // const [messageList, setMessageList] = useState({});
-  const [value, setValue] = useState("");
   const ref = useRef(null);
   const refWrapper = useRef(null);
+  let [visible, setVisibility] = useState(false);
 
   const handleChangeValue = (event) => {
-    setValue(event.target.value);
+    dispatch(handleChangeMessageValue(event.target.value, roomId));
   };
   const handlePressInput = ({ code }) => {
     if (code === "Enter") {
@@ -76,24 +73,22 @@ export const MessageList = () => {
     (author = "user", botMessage) => {
       if (value || botMessage) {
         dispatch(
-          sendMessage({ author: author, text: botMessage || value }, roomId)
+          sendMessageWithBot({ author, text: botMessage || value }, roomId)
         );
-        if (!botMessage) setValue("");
       }
     },
     [dispatch, value, roomId]
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     let block = refWrapper.current;
-    document.querySelector(".hidden").setAttribute("visibility", "hidden");
     const cb = debounce(() => {
       let isBottom =
         block?.scrollTop + window.innerHeight >= block?.scrollHeight;
       if (!isBottom) {
-        document.querySelector(".hidden").setAttribute("visibility", "visible");
+        setVisibility(true);
       } else {
-        document.querySelector(".hidden").setAttribute("visibility", "hidden");
+        setVisibility(false);
       }
     }, 200);
 
@@ -107,39 +102,35 @@ export const MessageList = () => {
   useEffect(() => {
     ref.current?.focus();
   }, [ref]);
+
   useEffect(() => {
-    const isValidRoomId = conversations.includes(roomId);
+    const isValidRoomId = conversations.find(
+      (conversation) => conversation.title === roomId
+    );
 
     if (!isValidRoomId && roomId) {
       navigate("/chat");
     }
   }, [roomId, conversations, navigate]);
 
-  useEffect(() => {
-    let timer = null;
-    if (messages.length && messages[messages.length - 1].author === "user") {
-      timer = setTimeout(() => {
-        addMessage("robot", "Hi, I am Robot.");
-      }, 1500);
-    }
-    return () => clearInterval(timer);
-  }, [messages, roomId, addMessage]);
-
   return (
     <div className={styles.messageList} ref={refWrapper}>
-      <ArrowDropDownCircleOutlined
-        fontSize="large"
-        className={`${styles.downButton} hidden`}
-        onClick={() => {
-          refWrapper.current?.scrollTo(0, refWrapper.current?.scrollHeight);
-        }}
-      />
+      {visible && (
+        <ArrowDropDownCircleOutlined
+          fontSize="large"
+          className={styles.downButton}
+          onClick={() => {
+            refWrapper.current?.scrollTo(0, refWrapper.current?.scrollHeight);
+          }}
+        />
+      )}
       {messages.map((message) => (
         <Message
           dispatch={dispatch}
           message={message}
           refWrapper={refWrapper}
           key={message.id}
+          roomId={roomId}
         />
       ))}
       <div className={styles.messageComponent}>

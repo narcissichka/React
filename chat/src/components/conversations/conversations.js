@@ -58,7 +58,9 @@ export const ChatList = () => {
 
   const handleAddChat = () => {
     const name = prompt("Введите название комнаты");
-    const isValidName = !conversations.includes(name);
+    const isValidName = !conversations.find(
+      (conversation) => conversation.title === name
+    );
     if (name && isValidName) {
       dispatch(createConversation(name));
     } else {
@@ -69,10 +71,14 @@ export const ChatList = () => {
     <div className={styles.wrapper}>
       <List className={styles.chatList} component="nav">
         {conversations.map((chat) => (
-          <Link className={styles.link} key={chat} to={`/chat/${chat}`}>
+          <Link
+            className={styles.link}
+            key={chat.title}
+            to={`/chat/${chat.title}`}
+          >
             <ChatBar
-              title={chat}
-              selected={chat === roomId}
+              title={chat.title}
+              selected={chat.title === roomId}
               dispatch={dispatch}
             />
             <Divider />
