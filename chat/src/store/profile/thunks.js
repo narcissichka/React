@@ -14,12 +14,12 @@ import {
 } from "./actions";
 
 export const getSessionFB = () => async (dispatch, _, api) => {
-  let userInfo;
+  let userInfo = {};
   try {
     dispatch(getSessionStart());
     const snapshot = await api.getSessionApi();
     snapshot.forEach((snap) => {
-      userInfo = Object.values(snap.val());
+      userInfo[snap.key] = snap.val();
     });
     dispatch(getSessionSuccess(userInfo));
   } catch (e) {

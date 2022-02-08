@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Input, Button, Divider } from "@mui/material";
+import { HomeOutlined, Login, VpnKeyOutlined } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { useStyles } from "./use-styles";
 
 export function LoginForm({ title, submitButton, onSubmit }) {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -24,16 +27,27 @@ export function LoginForm({ title, submitButton, onSubmit }) {
       console.log("handleSubmit:error");
     }
   };
-
+  const styles = useStyles();
   return (
     <div>
-      <h1>{title}</h1>
-
+      <Link className={styles.linkHome} to={"/"}>
+        <HomeOutlined fontSize="large" />
+      </Link>
+      {title === "Login" && (
+        <Link className={styles.link} to={"/sign-up"}>
+          <VpnKeyOutlined fontSize="large" />
+        </Link>
+      )}{" "}
+      {title === "Sign up" && (
+        <Link className={styles.link} to={"/login"}>
+          <Login fontSize="large" />
+        </Link>
+      )}
+      <h1 className={styles.heading}>{title}</h1>
       <Divider />
-
       <Input
         fullWidth
-        placeholder="Введите email ..."
+        placeholder="Email ..."
         value={form.email}
         inputProps={{
           "data-name": "email",
@@ -42,7 +56,7 @@ export function LoginForm({ title, submitButton, onSubmit }) {
       />
       <Input
         fullWidth
-        placeholder="Введите password ..."
+        placeholder="Password ..."
         value={form.password}
         inputProps={{
           "data-name": "password",

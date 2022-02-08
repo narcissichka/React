@@ -1,18 +1,20 @@
 import { LoginForm } from "../components";
 import { firebaseApp } from "../api/firebase";
-
-const onSubmit = (email, password) => {
-  return firebaseApp.auth().createUserWithEmailAndPassword(email, password);
-};
+import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
 
 export function SignUpPage() {
+  const navigate = useNavigate();
+  const onSubmit = useCallback(
+    (email, password) => {
+      firebaseApp.auth().createUserWithEmailAndPassword(email, password);
+      setTimeout(() => navigate("/"), 100);
+    },
+    [navigate]
+  );
   return (
     <div>
-      <LoginForm
-        submitButton="Зарегистрироваться"
-        title="Регистрация"
-        onSubmit={onSubmit}
-      />
+      <LoginForm submitButton="sign up" title="Sign up" onSubmit={onSubmit} />
     </div>
   );
 }

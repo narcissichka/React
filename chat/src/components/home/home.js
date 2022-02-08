@@ -17,7 +17,7 @@ export const Home = () => {
       <h1 className={styles.heading}>HomePage</h1>
       <div className={styles.wrapper}>
         <List className={styles.list} component="nav">
-          {!!session && (
+          {!!session?.user?.email && (
             <>
               <Link className={styles.link} to={"/chat"}>
                 <ListItem>
@@ -36,7 +36,7 @@ export const Home = () => {
               </Link>
             </>
           )}
-          {!session && (
+          {!session?.user?.email && (
             <>
               <Link className={styles.link} to="/login">
                 <ListItem>
@@ -51,8 +51,12 @@ export const Home = () => {
             </>
           )}
         </List>
-        {!!session && <button onClick={signOut}>выход</button>}
         <h1 className={styles.welcome}>welcome</h1>
+        {!!session?.user?.email && (
+          <button className={styles.exit} onClick={signOut}>
+            exit
+          </button>
+        )}
       </div>
     </div>
   );

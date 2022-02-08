@@ -1,13 +1,12 @@
 import { db } from "./firebase";
 
-export const getSessionApi = () => db.ref("profile").child("userInfo").get();
-export const getSubmitApi = () => db.ref("profile").child("submit").get();
+export const getSessionApi = () => {
+  return db.ref("userInfo").get();
+};
+export const getSubmitApi = () => db.ref("submit").get();
 export const addInfoToSessionApi = (field, value) => {
-  return db
-    .ref("profile")
-    .child("userInfo")
-    .push({ [field]: value });
+  db.ref("userInfo").child(field).set(value);
 };
 export const setSubmitApi = (value) => {
-  return db.ref("profile").child("submit").set(value);
+  db.ref("submit").set(value);
 };
