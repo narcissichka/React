@@ -5,17 +5,27 @@ import {
   useState,
   useLayoutEffect,
 } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Input, InputAdornment } from "@mui/material";
-import { Send, ArrowDropDownCircleOutlined } from "@mui/icons-material";
+import {
+  Send,
+  ArrowDropDownCircleOutlined,
+  CloseSharp,
+} from "@mui/icons-material";
 import { useStyles } from "./use-styles";
 import debounce from "lodash.debounce";
-// import KeyboardArrowDownSharpIcon from '@mui/icons-material/KeyboardArrowDownSharp';
+import {
+  messagesSelector,
+  sendMessage,
+  deleteMessage,
+} from "../../store/messages";
+import { conversationsSelector } from "../../store/conversations";
+import { useDispatch, useSelector } from "react-redux";
 
-const Message = ({ message, refWrapper }) => {
+const Message = ({ message, refWrapper, dispatch }) => {
   const styles = useStyles(message);
   const refMessage = useRef(null);
-
+  const { roomId } = useParams();
   useEffect(() => {
     let block = refWrapper.current;
     let isBottom = block?.scrollTop + window.innerHeight >= block?.scrollHeight;
@@ -23,8 +33,16 @@ const Message = ({ message, refWrapper }) => {
       refMessage.current?.scrollIntoView();
     }
   }, [refMessage, refWrapper]);
+  const handleDeleteMessage = (event) => {
+    dispatch(deleteMessage(message.id, roomId));
+  };
   return (
     <div ref={refMessage} className={styles.messageCart}>
+      <CloseSharp
+        className={styles.delete}
+        fontSize="small"
+        onClick={handleDeleteMessage}
+      />
       <p className={styles.messageCartAuthor}>{message.author}</p>
       <p className={styles.messageCartText}>{message.text}</p>
       <p className={styles.messageCartTime}>{message.time}</p>
@@ -34,8 +52,14 @@ const Message = ({ message, refWrapper }) => {
 
 export const MessageList = () => {
   const styles = useStyles();
+
   const { roomId } = useParams();
-  const [messageList, setMessageList] = useState({});
+  const navigate = useNavigate();
+
+  const messages = useSelector(messagesSelector(roomId));
+  const conversations = useSelector(conversationsSelector);
+  const dispatch = useDispatch();
+  // const [messageList, setMessageList] = useState({});
   const [value, setValue] = useState("");
   const ref = useRef(null);
   const refWrapper = useRef(null);
@@ -51,21 +75,13 @@ export const MessageList = () => {
   const addMessage = useCallback(
     (author = "user", botMessage) => {
       if (value || botMessage) {
-        setMessageList({
-          ...messageList,
-          [roomId]: [
-            ...(messageList[roomId] ?? []),
-            {
-              text: botMessage || value,
-              author,
-              time: new Date().toString().slice(4, 25),
-            },
-          ],
-        });
+        dispatch(
+          sendMessage({ author: author, text: botMessage || value }, roomId)
+        );
         if (!botMessage) setValue("");
       }
     },
-    [messageList, value, roomId]
+    [dispatch, value, roomId]
   );
 
   useLayoutEffect(() => {
@@ -91,22 +107,24 @@ export const MessageList = () => {
   useEffect(() => {
     ref.current?.focus();
   }, [ref]);
+  useEffect(() => {
+    const isValidRoomId = conversations.includes(roomId);
+
+    if (!isValidRoomId && roomId) {
+      navigate("/chat");
+    }
+  }, [roomId, conversations, navigate]);
 
   useEffect(() => {
-    const roomMessages = messageList[roomId] ?? [];
     let timer = null;
-    if (
-      roomMessages.length &&
-      roomMessages[roomMessages.length - 1].author === "user"
-    ) {
+    if (messages.length && messages[messages.length - 1].author === "user") {
       timer = setTimeout(() => {
         addMessage("robot", "Hi, I am Robot.");
       }, 1500);
     }
     return () => clearInterval(timer);
-  }, [messageList, roomId, addMessage]);
+  }, [messages, roomId, addMessage]);
 
-  const roomMessages = messageList[roomId] ?? [];
   return (
     <div className={styles.messageList} ref={refWrapper}>
       <ArrowDropDownCircleOutlined
@@ -116,8 +134,13 @@ export const MessageList = () => {
           refWrapper.current?.scrollTo(0, refWrapper.current?.scrollHeight);
         }}
       />
-      {roomMessages.map((message, i) => (
-        <Message message={message} refWrapper={refWrapper} key={i.toString()} />
+      {messages.map((message) => (
+        <Message
+          dispatch={dispatch}
+          message={message}
+          refWrapper={refWrapper}
+          key={message.id}
+        />
       ))}
       <div className={styles.messageComponent}>
         <div className={styles.messageForm}>

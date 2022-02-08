@@ -1,5 +1,5 @@
 export * from "./template";
-export * from "./chat-bar";
-export * from "./message-list";
+export * from "./conversations";
+export * from "./messages";
 export * from "./home";
 export * from "./profile";
