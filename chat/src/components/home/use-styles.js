@@ -12,6 +12,7 @@ export const useStyles = makeStyles((ctx) => {
       backgroundRepeat: "no-repeat",
       height: "95vh",
       width: "100%",
+      textAlign: "center",
     },
     list: {
       display: "flex",

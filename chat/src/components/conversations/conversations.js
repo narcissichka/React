@@ -8,8 +8,10 @@ import {
 } from "@mui/material";
 import {
   conversationsSelector,
-  createConversation,
-  deleteConversation,
+  putConversationFB,
+  // createConversation,
+  //deleteConversation,
+  deleteConversationFB,
 } from "../../store/conversations";
 import { messagesSelector } from "../../store/messages";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +24,7 @@ export const ChatBar = ({ title, selected, handleListItemClick, dispatch }) => {
   const messages = useSelector(messagesSelector(title));
   let lastMessage = messages.length ? messages[messages.length - 1] : null;
   const handleDeleteChat = (event) => {
-    dispatch(deleteConversation(title));
+    dispatch(deleteConversationFB(title));
     setTimeout(() => navigate("/chat"), 100);
   };
   return (
@@ -62,7 +64,8 @@ export const ChatList = () => {
       (conversation) => conversation.title === name
     );
     if (name && isValidName) {
-      dispatch(createConversation(name));
+      // dispatch(putConversationFB(name));
+      dispatch(putConversationFB(name));
     } else {
       alert("не валидная комната");
     }

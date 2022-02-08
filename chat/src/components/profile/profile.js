@@ -1,10 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import {
-  setName,
-  setSurname,
-  setSubscription,
-  setSex,
-  setSubmit,
+  setSubmitFB,
+  editProfileFB,
   deleteInfo,
   profileSelector,
   submitSelector,
@@ -16,36 +13,24 @@ import { useStyles } from "./use-styles";
 const ProfileInfo = () => {
   const styles = useStyles();
   const dispatch = useDispatch();
-  let userInfo = useSelector(profileSelector);
-  let submit = useSelector(submitSelector);
+  const userInfo = useSelector(profileSelector);
+  const submit = useSelector(submitSelector);
 
   const handleSubmit = () => {
-    dispatch(setSubmit(true));
+    dispatch(setSubmitFB(true));
+  };
+  const handleValue = (e, field) => {
+    dispatch(setSubmitFB(false));
+    dispatch(editProfileFB(field, e.target.value));
   };
   const handleUnsubmit = () => {
-    dispatch(setSubmit(false));
-    dispatch(setSubscription(false));
+    dispatch(setSubmitFB(false));
+    dispatch(editProfileFB("subscription", false));
     dispatch(deleteInfo());
   };
-  const handleSexValue = (event) => {
-    dispatch(setSubmit(false));
-    dispatch(setSex(event.target.value));
-  };
-  const handleSubscribtionValue = (event) => {
-    dispatch(setSubmit(false));
-    dispatch(setSubscription(event.target.checked));
-  };
-  const handleNameValue = (event) => {
-    dispatch(setSubmit(false));
-    dispatch(setName(event.target.value));
-  };
-  const handleSurnameValue = (event) => {
-    dispatch(setSubmit(false));
-    dispatch(setSurname(event.target.value));
-  };
-  let { name, surname, sex, subscription } = userInfo ?? "";
 
-  if (submit && name && surname && sex) {
+  let { name, surname, sex, subscription } = userInfo ?? "";
+  if (submit && userInfo.name && userInfo.surname && userInfo.sex) {
     return (
       <div className={styles.wrapper}>
         <h2>{name + " " + surname}</h2>
@@ -62,19 +47,25 @@ const ProfileInfo = () => {
         <input
           required
           type="text"
-          onInput={handleNameValue}
+          onInput={(e) => {
+            handleValue(e, "name");
+          }}
           placeholder="Name"
         />
         <input
           required
           type="text"
-          onInput={handleSurnameValue}
+          onInput={(e) => {
+            handleValue(e, "surname");
+          }}
           placeholder="Surname"
         />
         <div>
           <input
             type="checkbox"
-            onChange={handleSubscribtionValue}
+            onChange={(e) => {
+              handleValue(e, "subscription");
+            }}
             id="checkbox"
           />
           <label htmlFor="checkbox">subscribe for notifications</label>
@@ -84,7 +75,9 @@ const ProfileInfo = () => {
           <input
             type="radio"
             name="sex"
-            onClick={handleSexValue}
+            onClick={(e) => {
+              handleValue(e, "sex");
+            }}
             value="male"
             id="radio-male"
           />
@@ -92,7 +85,9 @@ const ProfileInfo = () => {
           <input
             type="radio"
             name="sex"
-            onClick={handleSexValue}
+            onClick={(e) => {
+              handleValue(e, "sex");
+            }}
             value="female"
             id="radio-female"
           />
@@ -100,7 +95,9 @@ const ProfileInfo = () => {
           <input
             type="radio"
             name="sex"
-            onClick={handleSexValue}
+            onClick={(e) => {
+              handleValue(e, "sex");
+            }}
             value="other"
             id="radio-other"
           />
@@ -114,6 +111,7 @@ const ProfileInfo = () => {
 
 export const Profile = () => {
   const styles = useStyles();
+
   return (
     <div>
       <Link className={styles.linkHome} to={"/"}>
